@@ -30,7 +30,7 @@
 ├── kruskal.cpp
 ├── Kruskal’s MST + Contradiction Explanation (Code).cpp
 ├── Max Flow Algorithms (Ford-Fulkerson + Edmonds-Kar.cpp
-├── Neev_DSA_Kr/
+├── DSA_Kr/
 ├── Prefinal_ Exam_Q1_General_Tree_Pruning.cpp
 ├── prims_algo.cpp
 ├── second_best_spannig_tree.cpp
