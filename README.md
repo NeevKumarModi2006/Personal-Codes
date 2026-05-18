@@ -290,3 +290,4 @@ Based on the analysis, here are the recommendations to correct and standardize t
 | Number of islands II | Disjoint Set (`disjointSet.cpp`) |
 | Making a large island | Disjoint Set (`disjointSet.cpp`) |
 | Swim in Rising Water | Disjoint Set / Dijkstra |
+| Eulerian Path / Reconstruct Itinerary | Hierholzer's Algorithm (`hierholzersAlgorithm.cpp`) |
