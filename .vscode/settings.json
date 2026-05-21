@@ -1,9 +1,3 @@
 {
-    "files.associations": {
-        "*.sqlbook": "sql",
-        "*.ndjson": "jsonl",
-        "*.dbclient-js": "javascript",
-        "vector": "cpp",
-        "xstring": "cpp"
-    }
+    "r.lsp.promptToInstall": false
 }

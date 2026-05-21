@@ -1,0 +1,828 @@
+===============================================================================
+                                CHEAT SHEET
+===============================================================================
+
+MAX HEAP: top largest
+----------
+priority_queue<int> pq;
+
+MIN HEAP:
+----------
+priority_queue<int, vector<int>, greater<int>> pq;
+
+PAIR MAX HEAP:
+---------------
+priority_queue<pair<int,int>> pq;
+
+PAIR MIN HEAP:
+---------------
+priority_queue<
+    pair<int,int>,
+    vector<pair<int,int>>,
+    greater<pair<int,int>>
+> pq;
+
+CUSTOM FOR pq
+--------------
+struct Node {
+    int d, x, y;
+    
+    // Operator overload for priority_queue
+    bool operator>(const Node& other) const {
+        return d > other.d; // min-heap based on d
+    }
+};
+
+priority_queue<Node, vector<Node>, greater<Node>> pq;
+
+CUSTOM COMPARATOR:
+------------------
+class Compare {
+public:             don't forget this public 
+    bool operator()(int a, int b) {
+        return a > b;
+    }
+};
+
+priority_queue<int, vector<int>, Compare> pq;
+
+LAMBDA COMPARATOR:
+------------------
+auto cmp = [](const TYPE a,const TYPE b) {
+    return condition;
+};
+
+
+priority_queue<
+    TYPE,
+    vector<TYPE>,
+    decltype(cmp)
+> pq(cmp);
+
+Why decltype(cmp) ?  Lambda has a hidden compiler-generated type.
+When using a lambda comparator, the comparator is actually an object.
+pq(cmp)  : Because priority_queue needs a comparator object internally.
+
+priority_queue<
+    int,
+    vector<int>,
+    decltype(cmp)
+> pq(
+    cmp,
+    x   // x is a vector
+);    
+
+
+priority_queue<
+    int,
+    vector<int>,
+    decltype(cmp)
+> pq(
+    cmp,
+    vector<int>(
+        x.begin() + a,
+        x.begin() + b
+    )
+);
+
+
+OR 
+---
+priority_queue<
+    T,
+    vector<T>,
+    decltype([](T a, T b) {
+        return condition;
+    })
+> pq(
+    [](T a, int b) {
+        return condition ;
+    }
+);
+===============================================================================
+
+
+/*
+===============================================================================
+                    PRIORITY QUEUE COMPLETE NOTES (C++)
+===============================================================================
+
+A priority_queue is a container adaptor in C++ STL.
+
+NORMAL QUEUE:
+--------------
+FIFO (First In First Out)
+
+PRIORITY QUEUE:
+---------------
+Highest priority element comes out first.
+
+Default behavior:
+-----------------
+Largest element has highest priority.
+So by default -> MAX HEAP
+
+Internally implemented using:
+-----------------------------
+BINARY HEAP
+
+HEADER FILE:
+-------------
+#include <queue>
+
+TIME COMPLEXITIES:
+------------------
+push()  -> O(log n)
+pop()   -> O(log n)
+top()   -> O(1)
+size()  -> O(1)
+empty() -> O(1)
+
+===============================================================================
+                                BASIC SYNTAX
+===============================================================================
+
+priority_queue<data_type> pq;
+
+Example:
+priority_queue<int> pq;
+
+===============================================================================
+                            1. MAX HEAP (DEFAULT)
+===============================================================================
+*/
+
+#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+void maxHeapExample() {
+
+    /*
+    DEFAULT = MAX HEAP
+
+    Largest element stays at top.
+    */
+
+    priority_queue<int> pq;
+
+    pq.push(10);
+    pq.push(40);
+    pq.push(20);
+    pq.push(5);
+
+    /*
+    Heap internally:
+            40
+          /    \
+        10      20
+       /
+      5
+
+    top() always gives largest.
+    */
+
+    cout << "MAX HEAP:\n";
+
+    cout << "Top element: " << pq.top() << "\n\n";
+
+    cout << "Elements in descending order:\n";
+
+    while(!pq.empty()) {
+
+        cout << pq.top() << " ";
+
+        pq.pop();
+    }
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                            2. MIN HEAP
+===============================================================================
+
+SYNTAX:
+--------
+priority_queue<
+    int,
+    vector<int>,
+    greater<int>
+> pq;
+
+EXPLANATION:
+------------
+1st parameter -> data type
+2nd parameter -> underlying container
+3rd parameter -> comparator
+
+greater<int> means:
+-------------------
+Smaller element gets higher priority.
+
+So this becomes MIN HEAP.
+*/
+
+void minHeapExample() {
+
+    priority_queue<
+        int,
+        vector<int>,
+        greater<int>
+    > pq;
+
+    pq.push(10);
+    pq.push(40);
+    pq.push(20);
+    pq.push(5);
+
+    cout << "MIN HEAP:\n";
+
+    cout << "Top element: " << pq.top() << "\n\n";
+
+    cout << "Elements in ascending order:\n";
+
+    while(!pq.empty()) {
+
+        cout << pq.top() << " ";
+
+        pq.pop();
+    }
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                        3. PRIORITY QUEUE OF PAIRS
+===============================================================================
+
+priority_queue<pair<int,int>>
+
+RULE:
+-----
+Comparison happens lexicographically.
+
+FIRST compare first element.
+If equal -> compare second element.
+
+Example:
+--------
+(5,7) > (5,2)
+because 7 > 2
+*/
+
+void pairMaxHeapExample() {
+
+    priority_queue<pair<int,int>> pq;
+
+    pq.push({2,10});
+    pq.push({5,1});
+    pq.push({5,7});
+    pq.push({1,100});
+
+    cout << "PAIR MAX HEAP:\n";
+
+    while(!pq.empty()) {
+
+        cout << "("
+             << pq.top().first
+             << ", "
+             << pq.top().second
+             << ") ";
+
+        pq.pop();
+    }
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                        4. MIN HEAP OF PAIRS
+===============================================================================
+*/
+
+void pairMinHeapExample() {
+
+    priority_queue<
+        pair<int,int>,
+        vector<pair<int,int>>,
+        greater<pair<int,int>>
+    > pq;
+
+    pq.push({5,2});
+    pq.push({1,9});
+    pq.push({3,7});
+
+    cout << "PAIR MIN HEAP:\n";
+
+    while(!pq.empty()) {
+
+        cout << "("
+             << pq.top().first
+             << ", "
+             << pq.top().second
+             << ") ";
+
+        pq.pop();
+    }
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                    5. CUSTOM COMPARATOR (VERY IMPORTANT)
+===============================================================================
+
+Suppose we want:
+----------------
+Smallest SECOND value should come first.
+
+Example:
+--------
+(1,50)
+(2,10)
+(3,30)
+
+Output should be:
+-----------------
+(2,10)
+(3,30)
+(1,50)
+
+CUSTOM COMPARATOR CLASS:
+------------------------
+
+RULE:
+-----
+If comparator returns TRUE
+=> order is WRONG
+=> swapping needed
+
+VERY IMPORTANT:
+----------------
+return a.second > b.second
+
+means:
+------
+If a.second is larger,
+swap it downward.
+
+So smaller second value rises upward.
+*/
+
+class Compare {
+
+public:
+
+    bool operator()(pair<int,int> a,
+                    pair<int,int> b) {
+
+        return a.second > b.second;
+    }
+};
+
+void customComparatorExample() {
+
+    priority_queue<
+        pair<int,int>,
+        vector<pair<int,int>>,
+        Compare
+    > pq;
+
+    pq.push({1,50});
+    pq.push({2,10});
+    pq.push({3,30});
+
+    cout << "CUSTOM COMPARATOR:\n";
+
+    while(!pq.empty()) {
+
+        cout << "("
+             << pq.top().first
+             << ", "
+             << pq.top().second
+             << ") ";
+
+        pq.pop();
+    }
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                    6. CUSTOM OBJECT IN PRIORITY QUEUE
+===============================================================================
+*/
+
+class Student {
+
+public:
+
+    string name;
+    int marks;
+
+    Student(string n, int m) {
+
+        name = n;
+        marks = m;
+    }
+};
+
+/*
+Want:
+-----
+Highest marks first.
+*/
+
+class StudentCompare {
+
+public:
+
+    bool operator()(Student a,
+                    Student b) {
+
+        return a.marks < b.marks;
+    }
+};
+
+void customObjectExample() {
+
+    priority_queue<
+        Student,
+        vector<Student>,
+        StudentCompare
+    > pq;
+
+    pq.push(Student("Rahul", 90));
+    pq.push(Student("Aman", 75));
+    pq.push(Student("Neha", 95));
+
+    cout << "CUSTOM OBJECT:\n";
+
+    while(!pq.empty()) {
+
+        cout << pq.top().name
+             << " -> "
+             << pq.top().marks
+             << "\n";
+
+        pq.pop();
+    }
+
+    cout << "\n";
+}
+
+/*
+===============================================================================
+                        7. LAMBDA COMPARATOR
+===============================================================================
+
+Modern C++ style.
+*/
+
+void lambdaComparatorExample() {
+
+    auto cmp = [](int a, int b) {
+
+        return a > b;
+    };
+
+    /*
+    decltype(cmp)
+    gives type of lambda.
+    */
+
+    priority_queue<
+        int,
+        vector<int>,
+        decltype(cmp)
+    > pq(cmp);
+
+    pq.push(10);
+    pq.push(2);
+    pq.push(7);
+
+    cout << "LAMBDA COMPARATOR (MIN HEAP):\n";
+
+    while(!pq.empty()) {
+
+        cout << pq.top() << " ";
+
+        pq.pop();
+    }
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                        8. INITIALIZE FROM VECTOR
+===============================================================================
+*/
+
+void buildFromVectorExample() {
+
+    vector<int> v = {4,1,9,2,7};
+
+    /*
+    Builds heap in O(n)
+    */
+
+    priority_queue<int> pq(v.begin(), v.end());
+
+    cout << "BUILD FROM VECTOR:\n";
+
+    while(!pq.empty()) {
+
+        cout << pq.top() << " ";
+
+        pq.pop();
+    }
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                    9. IMPORTANT STL HEAP FUNCTIONS
+===============================================================================
+
+These work directly on vectors.
+
+make_heap() -> creates heap
+push_heap() -> inserts into heap
+pop_heap()  -> removes top
+sort_heap() -> heap sort
+
+DEFAULT:
+--------
+MAX HEAP
+*/
+
+#include <algorithm>
+
+void heapFunctionsExample() {
+
+    vector<int> v = {10,20,5,7,1};
+
+    /*
+    Convert vector into heap
+    */
+
+    make_heap(v.begin(), v.end());
+
+    cout << "make_heap():\n";
+
+    for(int x : v)
+        cout << x << " ";
+
+    cout << "\n";
+
+    /*
+    Insert new element into heap
+    */
+
+    v.push_back(50);
+
+    push_heap(v.begin(), v.end());
+
+    cout << "After push_heap():\n";
+
+    for(int x : v)
+        cout << x << " ";
+
+    cout << "\n";
+
+    /*
+    pop_heap():
+    largest moves to end
+    */
+
+    pop_heap(v.begin(), v.end());
+
+    cout << "After pop_heap():\n";
+
+    for(int x : v)
+        cout << x << " ";
+
+    cout << "\n";
+
+    /*
+    Remove last manually
+    */
+
+    v.pop_back();
+
+    /*
+    Heap sort
+    */
+
+    sort_heap(v.begin(), v.end());
+
+    cout << "After sort_heap():\n";
+
+    for(int x : v)
+        cout << x << " ";
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                        10. K LARGEST ELEMENTS
+===============================================================================
+
+IMPORTANT INTERVIEW PROBLEM
+
+Use MIN HEAP of size K.
+
+WHY?
+----
+Keep only largest K elements.
+
+If heap size exceeds K:
+-----------------------
+Remove smallest.
+*/
+
+void kLargestExample() {
+
+    vector<int> arr = {7,10,4,3,20,15};
+
+    int k = 3;
+
+    priority_queue<
+        int,
+        vector<int>,
+        greater<int>
+    > pq;
+
+    for(int x : arr) {
+
+        pq.push(x);
+
+        if(pq.size() > k)
+            pq.pop();
+    }
+
+    cout << k << " Largest Elements:\n";
+
+    while(!pq.empty()) {
+
+        cout << pq.top() << " ";
+
+        pq.pop();
+    }
+
+    cout << "\n\n";
+}
+
+/*
+===============================================================================
+                    11. PRIORITY QUEUE INTERNAL WORKING
+===============================================================================
+
+BINARY HEAP INDEXING:
+---------------------
+
+For index i:
+
+Left child  -> 2*i + 1
+Right child -> 2*i + 2
+Parent      -> (i-1)/2
+
+INSERTION:
+----------
+1. Insert at end
+2. Heapify up
+
+DELETION:
+---------
+1. Remove top
+2. Move last to top
+3. Heapify down
+
+IMPORTANT:
+----------
+Priority Queue is NOT fully sorted.
+
+ONLY GUARANTEE:
+---------------
+top() is correct.
+
+Example heap:
+--------------
+        10
+       /  \
+      7    8
+
+This is valid heap even though:
+7 < 8
+
+because parent is larger than children.
+*/
+
+/*
+===============================================================================
+                        12. COMMON MISTAKES
+===============================================================================
+
+MISTAKE 1:
+-----------
+priority_queue<int, greater<int>> pq;
+
+WRONG.
+
+Need container too:
+-------------------
+priority_queue<int, vector<int>, greater<int>> pq;
+
+------------------------------------------------
+
+MISTAKE 2:
+-----------
+Using front()
+
+WRONG:
+------
+pq.front()
+
+CORRECT:
+--------
+pq.top()
+
+------------------------------------------------
+
+MISTAKE 3:
+-----------
+Trying iteration
+
+WRONG:
+------
+for(auto x : pq)
+
+Priority queue has NO iterators.
+
+Need:
+-----
+while(!pq.empty())
+
+------------------------------------------------
+
+MISTAKE 4:
+-----------
+Thinking it is fully sorted.
+
+NO.
+
+Only top element is guaranteed correct.
+*/
+
+
+===============================================================================
+                            13. REAL USE CASES
+===============================================================================
+
+1. Dijkstra Algorithm
+2. Prim's Algorithm
+3. Huffman Coding
+4. CPU Scheduling
+5. Task Scheduling
+6. Top K Problems
+7. Median in Stream
+8. Event Simulation
+9. A* Search
+10. Merge K Sorted Arrays
+
+
+
+int main() {
+
+    maxHeapExample();
+
+    minHeapExample();
+
+    pairMaxHeapExample();
+
+    pairMinHeapExample();
+
+    customComparatorExample();
+
+    customObjectExample();
+
+    lambdaComparatorExample();
+
+    buildFromVectorExample();
+
+    heapFunctionsExample();
+
+    kLargestExample();
+
+    return 0;
+}

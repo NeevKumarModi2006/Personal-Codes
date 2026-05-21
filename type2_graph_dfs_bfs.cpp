@@ -1,6 +1,5 @@
 //type 2
-#include <iostream>
-#include <vector>
+#include<bits/stdc++.h>
 using namespace std;
 
 class Graph {
@@ -20,7 +19,6 @@ public:
             cout << endl;
         }
     }
-};
 
 void BFS(int start) {
     vector<bool> visited(100, false);
@@ -54,15 +52,20 @@ void DFS_helper(int node, vector<bool> &visited) {
 }
 
 void DFS(int start) {
+    cout << "dfS : \n"; 
     vector<bool> visited(100, false);
-    DFSUtil(start, visited);
+    DFS_helper(start, visited);
+    cout << "\n================="<< endl;
 }
+};
 
 int main() {
     Graph g;
     g.addEdge(0, 1);
     g.addEdge(1, 2);
     g.addEdge(2, 3);
+    g.DFS(0);
+
     g.printGraph(4);
     return 0;
 }
