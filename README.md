@@ -13,7 +13,6 @@
 ├── articulation points - v2 - gdb.cpp
 ├── bellmanFord_shortestPathFromANodeToall.cpp
 ├── BipartiteGraphCheck.cpp
-├── BipartiteGraphCheck.exe
 ├── bottleneck_graph.cpp
 ├── Bridges (Critical Edges) - Tarjan’s Algorithm.cpp
 ├── c trie.cpp
@@ -28,11 +27,13 @@
 ├── hamiltonianPathscpp.cpp
 ├── hashing/
 ├── kruskal.cpp
+├── kth_shortest_path.cpp
 ├── Kruskal’s MST + Contradiction Explanation (Code).cpp
 ├── Max Flow Algorithms (Ford-Fulkerson + Edmonds-Kar.cpp
 ├── DSA_Kr/
 ├── Prefinal_ Exam_Q1_General_Tree_Pruning.cpp
 ├── prims_algo.cpp
+├── priority_queue.txt
 ├── second_best_spannig_tree.cpp
 ├── StronglyConnectedComponents_Kojaru'sAlgo.cpp
 ├── Suffix Trie (Advanced String Applications).cpp
@@ -119,6 +120,18 @@ This repository focuses on graph and trie algorithms. The analysis below is stri
     *   **Purpose:** Disjoint Set (DSU) based algorithms for Minimum Spanning Trees.
     *   **Quality:** Correct.
     *   **Category:** Standard Implementation | AI. *Remarks: Thoroughly documented DSU approach, comparisons, and algorithmic setups.* 
+*   **`kth_shortest_path.cpp`**
+    *   **Purpose:** Print the $k$ shortest paths from `src` to `dst` in a directed weighted graph.
+    *   **Quality:** Correct.
+    *   **Category:** Standard Implementation | Human (or mixed). *Remarks: Contains multiple well-known K-shortest-paths algorithms in one file with clear input/output specs and a built-in algorithm switch.*
+    *   **Details:**
+        *   For **non-negative edges** it uses **Yen’s algorithm** by default (k shortest *loopless/simple* paths). Optional alternatives are included in comments: **k-Dijkstra** (k shortest *walks*, nodes may repeat) and **Eppstein** (fast for large $k$, may include cycles).
+        *   If **any negative edge** is present it switches to **Johnson reweighting + Yen**, which works only when **no negative cycle** exists.
+*   **`priority_queue.txt`**
+    *   **Purpose:** A quick-reference cheat sheet + extended notes for C++ `priority_queue` usage.
+    *   **Quality:** Correct.
+    *   **Category:** Notes/Cheat Sheet.
+    *   **Details:** Covers max-heap vs min-heap setups, `pair<>` heaps, custom structs with `operator>`, custom comparator classes, and lambda comparators using `decltype`.
 *   **`Max Flow Algorithms (Ford-Fulkerson + Edmonds-Kar.cpp`**
     *   **Purpose:** Implementing Edmonds-Karp / Ford-Fulkerson max-flow trace structure.
     *   **Quality:** Correct.
